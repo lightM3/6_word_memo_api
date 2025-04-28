@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "zzMfv3ydsJFLPEBoMsBDBWsdnA1S1MQhbVRgYnS+vh0=",
+  "Source": "WordMemoAPI",
+  "BasePath": "_content/WordMemoAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
