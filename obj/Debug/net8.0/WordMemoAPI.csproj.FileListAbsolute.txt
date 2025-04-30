@@ -173,3 +173,4 @@ C:\Users\Murat\WordMemoAPI\obj\Debug\net8.0\WordMemoAPI.pdb
 C:\Users\Murat\WordMemoAPI\obj\Debug\net8.0\WordMemoAPI.genruntimeconfig.cache
 C:\Users\Murat\WordMemoAPI\obj\Debug\net8.0\ref\WordMemoAPI.dll
 C:\Users\Murat\WordMemoAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Murat\WordMemoAPI\obj\Debug\net8.0\WordMemoAPI.sourcelink.json

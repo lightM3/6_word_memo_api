@@ -23,8 +23,9 @@ namespace WordMemoryApi.Services
                 new Claim(ClaimTypes.Name, user.Username),
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF32.GetBytes(
-                _configuration["Jwt:Key"] ?? "default_secret_key_here"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+    _configuration["Jwt:Key"] ?? "default_secret_key_here"));
+
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 

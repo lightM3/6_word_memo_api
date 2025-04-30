@@ -8,7 +8,7 @@ using WordMemoryApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddScoped<WordService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
