@@ -15,16 +15,18 @@ namespace WordMemoryApi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+
             modelBuilder.Entity<UserWord>()
                 .HasOne(uw => uw.User)
                 .WithMany(u => u.UserWords)
-                .HasForeignKey(uw => uw.UserId);
+                .HasForeignKey(uw => uw.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<UserWord>()
                 .HasOne(uw => uw.Word)
-                .WithMany(w => w.UserWords)
-                .HasForeignKey(uw => uw.WordId);
+                .WithMany()
+                .HasForeignKey(uw => uw.WordId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<QuizResult>()
                 .HasOne(qr => qr.User)
