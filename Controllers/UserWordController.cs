@@ -57,5 +57,16 @@ namespace WordMemoryApi.Controllers
 
             return Ok("Tekrar sayısı artırıldı");
         }
+
+
+        //Kullanıcının eklediği kelimeleri listeleme
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllUserWords()
+        {
+            int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var allWords = await _userWordService.GetByUserIdAsync(userId);
+            return Ok(allWords);
+        }
+
     }
 }

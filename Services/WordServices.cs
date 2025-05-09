@@ -33,7 +33,9 @@ namespace WordMemoryApi.Services
                 SampleSentence = dto.SampleSentence,
                 ImagePath = dto.ImagePath,
                 Category = dto.Category,
-                AddedDate = DateTime.Now
+                AddedDate = DateTime.Now,
+                AudioPath = dto.AudioPath,
+
             };
 
             _context.Words.Add(word);
@@ -51,6 +53,8 @@ namespace WordMemoryApi.Services
             word.SampleSentence = dto.SampleSentence;
             word.ImagePath = dto.ImagePath;
             word.Category = dto.Category;
+            word.AudioPath = dto.AudioPath;
+
 
             await _context.SaveChangesAsync();
             return true;

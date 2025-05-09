@@ -7,5 +7,7 @@ namespace WordMemoryApi.DTOs
         public string? SampleSentence { get; set; }
         public string? ImagePath { get; set; }
         public string? Category { get; set; }
+        public string? AudioPath { get; set; }
+
     }
 }

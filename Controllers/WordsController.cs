@@ -1,6 +1,9 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WordMemoryApi.Data;
 using WordMemoryApi.DTOs;
+using WordMemoryApi.Entities;
 using WordMemoryApi.Services;
 
 namespace WordMemoryApi.Controllers
@@ -10,39 +13,40 @@ namespace WordMemoryApi.Controllers
     public class WordsController : ControllerBase
     {
         private readonly WordService _wordService;
+        private readonly AppDbContext _context;
 
-        public WordsController(WordService wordService)
+        public WordsController(WordService wordService, AppDbContext context)
         {
             _wordService = wordService;
+            _context = context;
         }
 
-        // Tüm kelimeleri getir
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetAll()
-        {
-            var words = await _wordService.GetAllAsync();
-            return Ok(words);
-        }
-
-        // ID'ye göre bir kelime getir
-        [HttpGet("{id}")]
-        [Authorize]
-        public async Task<IActionResult> Get(int id)
-        {
-            var word = await _wordService.GetByIdAsync(id);
-            if (word == null) return NotFound();
-            return Ok(word);
-        }
 
         // Yeni kelime ekle
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Add([FromBody] WordDto dto)
         {
+            int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
             var word = await _wordService.AddAsync(dto);
-            return CreatedAtAction(nameof(Get), new { id = word.Id }, word);
+
+            var userWord = new UserWord
+            {
+                UserId = userId,
+                WordId = word.Id,
+                RepetitionCount = 0,
+                NextRepetitionDate = DateTime.UtcNow.AddDays(1)
+            };
+
+            _context.UserWords.Add(userWord);
+            await _context.SaveChangesAsync();
+
+
+            return Ok(word);
         }
+
+
 
         // Var olan kelimeyi güncelle
         [HttpPut("{id}")]
@@ -63,5 +67,55 @@ namespace WordMemoryApi.Controllers
             if (!success) return NotFound();
             return NoContent();
         }
+
+        //Fotoğraf ekle
+        [HttpPost("upload-image")]
+        [Authorize]
+        public async Task<IActionResult> UploadImage(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("Dosya bulunamadı");
+
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var relativePath = $"images/{fileName}";
+            return Ok(new { imagePath = relativePath });
+        }
+        // Ses dosyası ekleme
+        [HttpPost("upload-audio")]
+        [Authorize]
+        public async Task<IActionResult> UploadAudio(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("Dosya bulunamadı");
+
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "audio");
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var relativePath = $"audio/{fileName}";
+            return Ok(new { audioPath = relativePath });
+        }
+
     }
+
+
 }

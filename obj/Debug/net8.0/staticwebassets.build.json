@@ -1,12 +1,20 @@
 {
   "Version": 1,
-  "Hash": "zzMfv3ydsJFLPEBoMsBDBWsdnA1S1MQhbVRgYnS+vh0=",
+  "Hash": "V4WwrCH44RS8YLHNK3T09lGZJSnsc9HeridINxygaEU=",
   "Source": "WordMemoAPI",
   "BasePath": "_content/WordMemoAPI",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "WordMemoAPI\\wwwroot",
+      "Source": "WordMemoAPI",
+      "ContentRoot": "C:\\Users\\Murat\\WordMemoAPI\\wwwroot\\",
+      "BasePath": "_content/WordMemoAPI",
+      "Pattern": "**"
+    }
+  ],
   "Assets": [],
   "Endpoints": []
 }
