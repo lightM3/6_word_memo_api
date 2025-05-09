@@ -18,7 +18,7 @@ namespace WordMemoryApi.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto registerDto)
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
             var result = await _authService.RegisterAsync(registerDto);
 
@@ -28,17 +28,14 @@ namespace WordMemoryApi.Controllers
             return Ok("Kayıt başarılı!");
         }
 
-
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             var user = await _authService.LoginAsync(loginDto);
-
             if (user == null)
                 return Unauthorized("Kullanıcı adı veya şifre hatalı!");
 
             var token = _jwtService.GenerateToken(user);
-
             return Ok(new { token });
         }
     }

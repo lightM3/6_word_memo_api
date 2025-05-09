@@ -10,6 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<WordService>();
 builder.Services.AddControllers();
+builder.Services.AddMvc(options =>
+{
+    options.SuppressAsyncSuffixInActionNames = false;
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
