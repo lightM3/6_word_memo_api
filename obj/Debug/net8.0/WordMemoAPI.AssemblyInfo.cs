@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WordMemoAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6296f04f0c9c6caeaa33170d6419606a595d4336")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f369d00d2555bcf666745a782877d7b6ecce6fdd")]
 [assembly: System.Reflection.AssemblyProductAttribute("WordMemoAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WordMemoAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
