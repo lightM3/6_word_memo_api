@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Murat\\WordMemoAPI\\wwwroot\\images\\3093355c-a5c0-420a-a8bd-45bfe5e278b9.jpg",
+      "PackagePath": "staticwebassets\\images\\3093355c-a5c0-420a-a8bd-45bfe5e278b9.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.WordMemoAPI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.WordMemoAPI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.WordMemoAPI.props",
+      "PackagePath": "build\\WordMemoAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.WordMemoAPI.props",
+      "PackagePath": "buildMultiTargeting\\WordMemoAPI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.WordMemoAPI.props",
+      "PackagePath": "buildTransitive\\WordMemoAPI.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

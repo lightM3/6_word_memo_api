@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using WordMemoryApi.Data;
 using WordMemoryApi.Services;
 
 namespace WordMemoryApi.Controllers
@@ -11,11 +13,14 @@ namespace WordMemoryApi.Controllers
     public class UserWordController : ControllerBase
     {
         private readonly UserWordService _userWordService;
+        private readonly AppDbContext _context;
 
-        public UserWordController(UserWordService userWordService)
+        public UserWordController(UserWordService userWordService, AppDbContext context)
         {
             _userWordService = userWordService;
+            _context = context;
         }
+
 
         // Kullanıcının tekrar listesi
         [HttpGet("due")]
@@ -67,6 +72,57 @@ namespace WordMemoryApi.Controllers
             var allWords = await _userWordService.GetByUserIdAsync(userId);
             return Ok(allWords);
         }
+
+        [HttpGet("analysis")]
+        [Authorize]
+        public async Task<IActionResult> GetAnalysis()
+        {
+            int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var userWords = await _context.UserWords
+                .Include(uw => uw.Word)
+                .Where(uw => uw.UserId == userId)
+                .ToListAsync();
+
+            int total = userWords.Count;
+            int learned = userWords.Count(w => w.RepetitionCount >= 6);
+
+            var categoryMap = userWords
+                .GroupBy(w => w.Word.Category ?? "belirsiz")
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Count(w => w.RepetitionCount >= 6)
+                );
+
+            return Ok(new
+            {
+                total,
+                learned,
+                successRate = total == 0 ? 0 : (double)learned / total * 100,
+                categorySuccess = categoryMap
+            });
+        }
+
+
+        [HttpGet("category-stats")]
+        public async Task<IActionResult> GetCategoryStats()
+        {
+            int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
+            var userWords = await _userWordService.GetByUserIdAsync(userId);
+
+            var grouped = userWords
+                .GroupBy(w => w.Word.Category ?? "belirsiz")
+                .Select(g => new
+                {
+                    Category = g.Key,
+                    LearnedCount = g.Count(w => w.RepetitionCount >= 6)
+                });
+
+            return Ok(grouped);
+        }
+
+
 
     }
 }

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "V4WwrCH44RS8YLHNK3T09lGZJSnsc9HeridINxygaEU=",
+  "Hash": "jbV+02KEMUzhQChmVhnDlsggRFAHToTshxu8JcxEajc=",
   "Source": "WordMemoAPI",
   "BasePath": "_content/WordMemoAPI",
   "Mode": "Default",
@@ -15,6 +15,111 @@
       "Pattern": "**"
     }
   ],
-  "Assets": [],
-  "Endpoints": []
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\Murat\\WordMemoAPI\\wwwroot\\images\\3093355c-a5c0-420a-a8bd-45bfe5e278b9.jpg",
+      "SourceId": "WordMemoAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Murat\\WordMemoAPI\\wwwroot\\",
+      "BasePath": "_content/WordMemoAPI",
+      "RelativePath": "images/3093355c-a5c0-420a-a8bd-45bfe5e278b9#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "klh57we6uo",
+      "Integrity": "qNBtay+PstjO3Z3hi9obO6VCI4qA8qw0UmHaRTTm3d4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\3093355c-a5c0-420a-a8bd-45bfe5e278b9.jpg"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "images/3093355c-a5c0-420a-a8bd-45bfe5e278b9.jpg",
+      "AssetFile": "C:\\Users\\Murat\\WordMemoAPI\\wwwroot\\images\\3093355c-a5c0-420a-a8bd-45bfe5e278b9.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "114509"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"qNBtay+PstjO3Z3hi9obO6VCI4qA8qw0UmHaRTTm3d4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 12:06:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-qNBtay+PstjO3Z3hi9obO6VCI4qA8qw0UmHaRTTm3d4="
+        }
+      ]
+    },
+    {
+      "Route": "images/3093355c-a5c0-420a-a8bd-45bfe5e278b9.klh57we6uo.jpg",
+      "AssetFile": "C:\\Users\\Murat\\WordMemoAPI\\wwwroot\\images\\3093355c-a5c0-420a-a8bd-45bfe5e278b9.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "114509"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"qNBtay+PstjO3Z3hi9obO6VCI4qA8qw0UmHaRTTm3d4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 12:06:11 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "klh57we6uo"
+        },
+        {
+          "Name": "label",
+          "Value": "images/3093355c-a5c0-420a-a8bd-45bfe5e278b9.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-qNBtay+PstjO3Z3hi9obO6VCI4qA8qw0UmHaRTTm3d4="
+        }
+      ]
+    }
+  ]
 }

@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WordMemoryApi.Data;
 using WordMemoryApi.DTOs;
 using WordMemoryApi.Entities;
@@ -27,10 +28,17 @@ namespace WordMemoryApi.Controllers
         [Authorize]
         public async Task<IActionResult> Add([FromBody] WordDto dto)
         {
+            // 1. Aynı İngilizce kelime veritabanında zaten varsa, ekleme
+            var exists = await _context.Words.AnyAsync(w => w.EngWord.ToLower() == dto.EngWord.ToLower());
+            if (exists)
+                return BadRequest("Bu kelime zaten mevcut.");
+
+            // 2. Kelimeyi veritabanına ekle
             int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var word = await _wordService.AddAsync(dto);
 
+            // 3. Kullanıcı ile ilişkilendir
             var userWord = new UserWord
             {
                 UserId = userId,
@@ -42,9 +50,9 @@ namespace WordMemoryApi.Controllers
             _context.UserWords.Add(userWord);
             await _context.SaveChangesAsync();
 
-
             return Ok(word);
         }
+
 
 
 
@@ -114,6 +122,15 @@ namespace WordMemoryApi.Controllers
             var relativePath = $"audio/{fileName}";
             return Ok(new { audioPath = relativePath });
         }
+
+        [HttpGet("all")]
+        [Authorize]
+        public async Task<IActionResult> GetAllWords()
+        {
+            var words = await _context.Words.ToListAsync();
+            return Ok(words);
+        }
+
 
     }
 
