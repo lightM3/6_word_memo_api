@@ -6,6 +6,7 @@ using System.Text;
 using WordMemoryApi.Data;
 using WordMemoryApi.Services;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<WordService>();
@@ -53,7 +54,11 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    options.UseNpgsql(connectionString);
+});
+
 
 
 
