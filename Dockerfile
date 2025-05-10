@@ -16,4 +16,5 @@ COPY --from=build /app/out .
 ENV ASPNETCORE_URLS=http://+:5041
 EXPOSE 5041
 
-ENTRYPOINT ["dotnet", "WordMemoryApi.dll"]
+ENTRYPOINT ["dotnet", "WordMemoAPI.dll"]
+
