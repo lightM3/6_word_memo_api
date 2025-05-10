@@ -108,4 +108,4 @@ app.UseAuthorization();
 app.UseStaticFiles();
 app.MapControllers();
 
-app.Run("http://0.0.0.0:5041");
+app.Run();
