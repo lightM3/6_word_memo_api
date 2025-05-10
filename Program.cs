@@ -55,9 +55,10 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
     options.UseNpgsql(connectionString);
 });
+
 
 
 
