@@ -22,6 +22,31 @@ namespace WordMemoAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("UserSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DailyWordLimit")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastWordAdditionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserSettings");
+                });
+
             modelBuilder.Entity("WordMemoryApi.Entities.QuizResult", b =>
                 {
                     b.Property<int>("Id")
@@ -85,6 +110,9 @@ namespace WordMemoAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("AddedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsMastered")
                         .HasColumnType("bit");
 
@@ -100,16 +128,11 @@ namespace WordMemoAPI.Migrations
                     b.Property<int>("WordId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("WordId1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
                     b.HasIndex("WordId");
-
-                    b.HasIndex("WordId1");
 
                     b.ToTable("UserWords");
                 });
@@ -150,6 +173,17 @@ namespace WordMemoAPI.Migrations
                     b.ToTable("Words");
                 });
 
+            modelBuilder.Entity("UserSettings", b =>
+                {
+                    b.HasOne("WordMemoryApi.Entities.User", "User")
+                        .WithOne("Settings")
+                        .HasForeignKey("UserSettings", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("WordMemoryApi.Entities.QuizResult", b =>
                 {
                     b.HasOne("WordMemoryApi.Entities.User", "User")
@@ -170,14 +204,10 @@ namespace WordMemoAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("WordMemoryApi.Entities.Word", "Word")
-                        .WithMany()
+                        .WithMany("UserWords")
                         .HasForeignKey("WordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("WordMemoryApi.Entities.Word", null)
-                        .WithMany("UserWords")
-                        .HasForeignKey("WordId1");
 
                     b.Navigation("User");
 
@@ -187,6 +217,8 @@ namespace WordMemoAPI.Migrations
             modelBuilder.Entity("WordMemoryApi.Entities.User", b =>
                 {
                     b.Navigation("QuizResults");
+
+                    b.Navigation("Settings");
 
                     b.Navigation("UserWords");
                 });

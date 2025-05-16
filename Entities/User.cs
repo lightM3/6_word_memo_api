@@ -15,5 +15,6 @@ namespace WordMemoryApi.Entities
         public ICollection<UserWord> UserWords { get; set; } = new List<UserWord>();
 
         public ICollection<QuizResult>? QuizResults { get; set; }
+        public UserSettings? Settings { get; set; }
     }
 }

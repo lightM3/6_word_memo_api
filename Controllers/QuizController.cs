@@ -37,7 +37,7 @@ namespace WordMemoryApi.Controllers
                 .Where(uw => uw.NextRepetitionDate <= DateTime.UtcNow && !uw.IsMastered)
                 .Select(uw => new
                 {
-                    WordId = uw.WordId,
+                    WordId = uw.Word.Id,
                     EngWord = uw.Word.EngWord,
                     TrWord = uw.Word.TrWord,
                     SampleSentence = uw.Word.SampleSentence,

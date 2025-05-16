@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WordMemoryApi.Data;
+using WordMemoryApi.DTOs;
 using WordMemoryApi.Services;
 
 namespace WordMemoryApi.Controllers
@@ -21,7 +22,6 @@ namespace WordMemoryApi.Controllers
             _context = context;
         }
 
-
         // Kullanıcının tekrar listesi
         [HttpGet("due")]
         public async Task<IActionResult> GetDueWords()
@@ -29,10 +29,12 @@ namespace WordMemoryApi.Controllers
             int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             var allWords = await _userWordService.GetByUserIdAsync(userId);
-            var dueWords = allWords.Where(uw =>
-                uw.NextRepetitionDate.HasValue &&
-                uw.NextRepetitionDate.Value.Date <= DateTime.UtcNow.Date &&
-                !uw.IsMastered).ToList();
+            var dueWords = allWords
+                .Where(uw =>
+                    uw.NextRepetitionDate.HasValue &&
+                    uw.NextRepetitionDate.Value.Date <= DateTime.UtcNow.Date &&
+                    !uw.IsMastered)
+                .ToList();
 
             return Ok(dueWords);
         }
@@ -48,7 +50,7 @@ namespace WordMemoryApi.Controllers
                 return BadRequest("Zaten eklenmiş");
 
             var result = await _userWordService.CreateAsync(userId, wordId);
-            return Ok(result);
+            return Ok(new { message = "İlişki oluşturuldu", userWordId = result.Id });
         }
 
         // Doğru bilinen kelimenin tekrar sayısını artır
@@ -63,8 +65,7 @@ namespace WordMemoryApi.Controllers
             return Ok("Tekrar sayısı artırıldı");
         }
 
-
-        //Kullanıcının eklediği kelimeleri listeleme
+        // Kullanıcının eklediği kelimeleri listeleme
         [HttpGet("all")]
         public async Task<IActionResult> GetAllUserWords()
         {
@@ -73,16 +74,12 @@ namespace WordMemoryApi.Controllers
             return Ok(allWords);
         }
 
+        // İstatistik: toplam/öğrenilen kelimeler ve kategori bazlı başarı oranı
         [HttpGet("analysis")]
-        [Authorize]
         public async Task<IActionResult> GetAnalysis()
         {
             int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
-            var userWords = await _context.UserWords
-                .Include(uw => uw.Word)
-                .Where(uw => uw.UserId == userId)
-                .ToListAsync();
+            var userWords = await _userWordService.GetByUserIdAsync(userId);
 
             int total = userWords.Count;
             int learned = userWords.Count(w => w.RepetitionCount >= 6);
@@ -103,12 +100,11 @@ namespace WordMemoryApi.Controllers
             });
         }
 
-
+        // Kategori bazlı öğrenilen kelime sayısı
         [HttpGet("category-stats")]
         public async Task<IActionResult> GetCategoryStats()
         {
             int userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-
             var userWords = await _userWordService.GetByUserIdAsync(userId);
 
             var grouped = userWords
@@ -121,8 +117,5 @@ namespace WordMemoryApi.Controllers
 
             return Ok(grouped);
         }
-
-
-
     }
 }

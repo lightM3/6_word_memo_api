@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace WordMemoryApi.Entities
 {
     public class UserWord
@@ -12,7 +14,9 @@ namespace WordMemoryApi.Entities
 
         public int RepetitionCount { get; set; } = 0;
         public DateTime? NextRepetitionDate { get; set; }
-
         public bool IsMastered { get; set; } = false;
+        public DateTime AddedDate { get; set; } = DateTime.UtcNow;
+
     }
+
 }

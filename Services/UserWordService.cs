@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WordMemoryApi.Data;
+using WordMemoryApi.DTOs;
 using WordMemoryApi.Entities;
 
 namespace WordMemoryApi.Services
@@ -13,13 +14,31 @@ namespace WordMemoryApi.Services
             _context = context;
         }
 
-        // Kullanıcının tüm UserWord verilerini getir
-        public async Task<List<UserWord>> GetByUserIdAsync(int userId)
+        // Kullanıcının tüm UserWord verilerini getir (DTO ile döner)
+        public async Task<List<UserWordDto>> GetByUserIdAsync(int userId)
         {
-            return await _context.UserWords
+            var userWords = await _context.UserWords
                 .Include(uw => uw.Word)
                 .Where(uw => uw.UserId == userId)
                 .ToListAsync();
+
+            return userWords.Select(uw => new UserWordDto
+            {
+                Id = uw.Id,
+                RepetitionCount = uw.RepetitionCount,
+                NextRepetitionDate = uw.NextRepetitionDate,
+                IsMastered = uw.IsMastered,
+                Word = new WordDto
+                {
+                    Id = uw.Word.Id,
+                    EngWord = uw.Word.EngWord,
+                    TrWord = uw.Word.TrWord,
+                    Category = uw.Word.Category,
+                    SampleSentence = uw.Word.SampleSentence,
+                    AudioPath = uw.Word.AudioPath,
+                    ImagePath = uw.Word.ImagePath
+                }
+            }).ToList();
         }
 
         // Belirli bir kullanıcı için bir kelimeyle ilişki var mı?
@@ -32,6 +51,10 @@ namespace WordMemoryApi.Services
         // Yeni ilişki oluştur
         public async Task<UserWord> CreateAsync(int userId, int wordId)
         {
+            var wordExists = await _context.Words.AnyAsync(w => w.Id == wordId);
+            if (!wordExists)
+                throw new Exception("WordId geçersiz.");
+
             var userWord = new UserWord
             {
                 UserId = userId,
@@ -39,9 +62,6 @@ namespace WordMemoryApi.Services
                 RepetitionCount = 0,
                 NextRepetitionDate = DateTime.UtcNow.AddDays(1)
             };
-            var wordExists = await _context.Words.AnyAsync(w => w.Id == wordId);
-            if (!wordExists)
-                throw new Exception("WordId geçersiz.");
 
             _context.UserWords.Add(userWord);
             await _context.SaveChangesAsync();
@@ -86,5 +106,42 @@ namespace WordMemoryApi.Services
                 _ => DateTime.UtcNow
             };
         }
+
+        public async Task AddDailyWordsAsync(User user)
+        {
+            var settings = await _context.UserSettings.FirstOrDefaultAsync(s => s.UserId == user.Id);
+            if (settings == null) return;
+
+            if (settings.LastWordAdditionDate.Date >= DateTime.Today)
+                return;
+
+            var learnedWordIds = await _context.UserWords
+                .Where(uw => uw.UserId == user.Id)
+                .Select(uw => uw.WordId)
+                .ToListAsync();
+
+            var newWords = await _context.Words
+                .Where(w => !learnedWordIds.Contains(w.Id))
+                .OrderBy(w => Guid.NewGuid())
+                .Take(settings.DailyWordLimit)
+                .ToListAsync();
+
+            foreach (var word in newWords)
+            {
+                _context.UserWords.Add(new UserWord
+                {
+                    UserId = user.Id,
+                    WordId = word.Id,
+                    RepetitionCount = 0,
+                    NextRepetitionDate = DateTime.UtcNow.AddDays(1),
+                    IsMastered = false,
+                    AddedDate = DateTime.UtcNow
+                });
+            }
+
+            settings.LastWordAdditionDate = DateTime.Today;
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
